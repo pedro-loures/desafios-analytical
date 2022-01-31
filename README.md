@@ -88,6 +88,6 @@ desenvolvedor) para os avaliadores.
 
 Os prazos podem ser estendidos a pedido do desenvolvedor.
 
-## mostQi
+## mostQI
 
 Acesse nosso [linkedin](https://www.linkedin.com/company/mobile-solution-technology/posts/?feedView=all) para mais informações sobre vagas e novidades.
