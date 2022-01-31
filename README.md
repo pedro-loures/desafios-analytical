@@ -78,7 +78,7 @@ Em ordem de importância:
 
 ## O que será disponibilizado
 
--   Imagens para teste;
+-   [Imagens para teste](/files/img-desafio.tar.xz);
 -   Acesso *ssh* com permissão de administrador para uma máquina recém
     formatada onde a solução deverá ser implementada e testada.
 
