@@ -1,6 +1,6 @@
 # Desafio Analytical
 
-Seguem abaixo os itens do Desafio mostQi para os candidatos à vaga para a equipe Analytical.
+Seguem abaixo os itens do desafio para os candidatos à vaga para a equipe Analytical.
 
 1. [Desafio 01](./desafio-01/README.md)
 
