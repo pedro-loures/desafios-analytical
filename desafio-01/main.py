@@ -10,7 +10,7 @@
 # -1 OK Read Document 
 # -2 OK Apply exponential filter
 # -3 OK Scan image using the image mean as a threshold
-# -4 TODO Apply local filter
+# -4 OK Apply local filter
 # -5 TODO Convolute image
 # -6 TODO Get min rectangle
 # -7 TODO expand/reduce min rectangle (with/whithout padding)

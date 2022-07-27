@@ -5,29 +5,67 @@ import utils as ut
 import numpy as np
 import cv2 as cv
 
-def process_img(img, reduce_factor = 7):
+
+# TODO apply filter in border
+def _filter_disturbance(image, filter_size, filter_sensibility):
+  assert filter_size < 100, "filter_size must be a percentage smaller than 100"
+
+  # process image
+  _img_black = (image == 0).astype(int)
+  _t_img_black = _img_black.T
+  _width, _height = image.shape 
+
+  # process parameters
+  _filter = int(min(_width, _height) * filter_size/100)
+  _line_sensibility = _filter/5
+  _half = int(_filter/2)
+  _sensibility = int((filter_sensibility/100) * (_filter*_filter))
+
+  # apply filter in image
+  for _y, _row in enumerate(_img_black):
+    for _x, _value in enumerate(_row):
+      if _value == 1: 
+        _soma = 0
+        _y_overflow = _y-_half < 0 or _y+_half+1 >= _width
+        _x_overflow = _x-_half < 0 or _x + _half >= _height
+        if _y_overflow or _x_overflow: continue
+        _soma = _img_black[_y-_half:_y+_half+1,_x-_half:_x+_half+1].sum()
+        
+        _liney = _img_black[_y][_x-_half:_x+_half+1].sum() > _line_sensibility    # if more than half the size
+        _linex = _t_img_black[_x][_y-_half:_y+_half+1].sum() > _line_sensibility  #  is black is a line
+        _condition = _soma < _sensibility  and not _linex and not _liney
+        if _condition: image[_y][_x] = 255 # makes it white
+  return image
+
+
+def process_img(img, reduce_factor = 7,
+                filter_size=10,filter_sensibility=15, 
+                ):
 
 
   # Process image 1
-  image= cv.imread(img)
-  original_image = image.copy()
-  image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+  _image= cv.imread(img)
+  _original_image = _image.copy()
+  _image = cv.cvtColor(_image, cv.COLOR_BGR2GRAY)
 
-  image = 255 - image # invert to reduce mean
+  _image = 255 - _image # invert to reduce mean
 
   # Exponential Filter 2
-  image = image * (image/255) * (image/255)
-  threshold = image.mean() # Define treshold
+  _image = _image * (_image/255) * (_image/255)
+  _threshold = _image.mean() # Define treshold
 
   # Resize image do make it lightier
-  _height, _width = image.shape 
+  _height, _width = _image.shape 
   _height, _width = int(_height/reduce_factor), int(_width/reduce_factor) 
-  image = cv.resize(image, (_width, _height))
+  _image = cv.resize(_image, (_width, _height))
 
   # Local Filter 3
-  image = (image < threshold).astype("uint8") * 255
+  _image = (_image < _threshold).astype("uint8") * 255
+
+  # Local Filter
+  _image = _filter_disturbance(_image, filter_size=filter_size, filter_sensibility=filter_sensibility)
 
 
-  cv.imwrite(ut.FINAL + "/final.png", image)
-  cv.imwrite(ut.FINAL + "/original.png", original_image)
+  cv.imwrite(ut.FINAL + "/final.png", _image)
+  cv.imwrite(ut.FINAL + "/original.png", _original_image)
   pass
