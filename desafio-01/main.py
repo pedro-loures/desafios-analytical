@@ -9,7 +9,7 @@
 # TODO list
 # -1 OK Read Document 
 # -2 OK Apply exponential filter
-# -3 TODO Scan image using the image mean as a threshold
+# -3 OK Scan image using the image mean as a threshold
 # -4 TODO Apply local filter
 # -5 TODO Convolute image
 # -6 TODO Get min rectangle
