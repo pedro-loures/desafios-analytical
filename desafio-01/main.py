@@ -8,7 +8,7 @@
 # remove white
 # TODO list
 # -1 OK Read Document 
-# -2 TODO Apply exponential filter
+# -2 OK Apply exponential filter
 # -3 TODO Scan image using the image mean as a threshold
 # -4 TODO Apply local filter
 # -5 TODO Convolute image
