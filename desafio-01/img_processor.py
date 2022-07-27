@@ -4,6 +4,7 @@ import utils as ut
 # External import
 import numpy as np
 import cv2 as cv
+import warnings
 
 
 # TODO apply filter in border
@@ -40,6 +41,7 @@ def _filter_disturbance(image, filter_size, filter_sensibility):
 
 def process_img(img, reduce_factor = 7,
                 filter_size=10,filter_sensibility=15, 
+                convolution_factor=20
                 ):
 
 
@@ -62,10 +64,27 @@ def process_img(img, reduce_factor = 7,
   # Local Filter 3
   _image = (_image < _threshold).astype("uint8") * 255
 
-  # Local Filter
+  # Local Filter 4
   _image = _filter_disturbance(_image, filter_size=filter_size, filter_sensibility=filter_sensibility)
+
+  # Checks as apply minimum convolution factor division
+  _input_convolution_factor = convolution_factor
+  if int(min(_image.shape)/convolution_factor) < 10: 
+    while(True):
+      convolution_factor = convolution_factor - 1
+      if int(min(_image.shape)/convolution_factor) > 10:
+        warnings.warn("input convolution_factor["+str(_input_convolution_factor)+"] too small, using "+ str(convolution_factor) + " instead.")
+        break
+
+  # Convolute image
+  s_height, s_columns = _image.shape
+  conv_height, conv_columns = int(s_height/convolution_factor), int(s_columns/convolution_factor)
+  _convolution = cv.resize(_image, (conv_columns, conv_height ))
+  _clean_convolution = _convolution.copy()
+
 
 
   cv.imwrite(ut.FINAL + "/final.png", _image)
+  cv.imwrite(ut.TMP + "/convolution.png", _convolution)
   cv.imwrite(ut.FINAL + "/original.png", _original_image)
   pass

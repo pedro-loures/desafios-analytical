@@ -11,7 +11,7 @@
 # -2 OK Apply exponential filter
 # -3 OK Scan image using the image mean as a threshold
 # -4 OK Apply local filter
-# -5 TODO Convolute image
+# -5 OK Convolute image
 # -6 TODO Get min rectangle
 # -7 TODO expand/reduce min rectangle (with/whithout padding)
 # -EXTRA minimum quadrange to correct perspective
