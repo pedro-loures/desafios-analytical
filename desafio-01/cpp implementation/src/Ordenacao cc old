@@ -1,0 +1,175 @@
+#include "Ordenacao.h"
+
+/************* MergeSort *****************/
+
+// faz as operações nas partições
+ void Merge(Consciencia *consciencias[], int inicio, int meio, int fim){
+
+  //cria vetores temporários
+  int tamEsquerda = meio - inicio + 1;
+  int tamDireita = fim - meio;
+  Consciencia *esquerdas[tamEsquerda], *direitas[tamDireita];
+
+  //copia dados para vetores temporários
+  for(int i = 0; i < tamEsquerda; i++){
+    esquerdas[i] = consciencias[inicio + i];
+  }
+  for(int j = 0; j < tamDireita; j++){
+    direitas[j] = consciencias[meio + 1 + j];
+  }
+
+  //merge arrays
+  int i, j, k;
+  i=0; j=0; k=inicio;
+  while((i < tamEsquerda) && (j < tamDireita) && (k < fim)){
+    
+    // verifica se a esquerda é maior ou igual 
+    int esquerdaMenor = !(MenorString(esquerdas[i]->Nome(), direitas[j]->Nome()));
+    if (esquerdaMenor){
+      consciencias[k] = esquerdas[i];
+      i++;
+    }
+    else{
+      consciencias[k] = direitas[j];
+      j++;
+    }
+    k++;
+  }
+
+  // copia o resto da esquerda se tiver
+  while (i < tamEsquerda) {
+    consciencias[k] = esquerdas[i];
+    i++;
+    k++;
+  }
+
+  // copia o resto da direita se tiver
+  while (j < tamDireita) {
+    consciencias[k] = direitas[j];
+    j++;
+    k++;
+  }
+
+  return;
+}
+
+// Implementação do mergeSort
+void OrdenaMS(Consciencia *consciencias[], int inicio, int fim){
+  //condicão de parada
+  if(inicio < fim){
+    int meio = (inicio + fim )/2;
+    OrdenaMS(consciencias, inicio, meio);
+    OrdenaMS(consciencias, meio+1, fim);
+    Merge(consciencias, inicio, meio, fim);
+  }
+}
+// chamada para simplificar
+void MergeSort(Consciencia *consciencias[], int tamanho){
+  OrdenaMS(consciencias, 0, tamanho-1);
+}
+
+/************ \MergeSort *****************/
+/************* QuickSort *****************/
+
+// faz as partições e parsa por elas
+void ParticaoQS(int inicio, int fim, int *i, int *j, Consciencia *consciencias[]){
+  Consciencia *pivot, *aux;
+  *i = inicio; *j = fim; 
+  pivot = consciencias[(inicio+fim)/2]; //pivot na metade
+  do{
+    
+    while(MenorString(pivot->Nome(), consciencias[*i]->Nome())) (*i)++;
+    while(MenorString(consciencias[*j]->Nome(), pivot->Nome())) (*j)--;
+    if(*i <= *j){
+      aux = consciencias[*i];
+
+      consciencias[*i] = consciencias[*j];
+      consciencias[*j] = aux;
+
+      (*i)++; (*j)--;
+    }
+  } while(*i <= *j); 
+}
+
+
+// algorítmo quicksort
+void OrdenaQS(Consciencia *consciencias[], int inicio, int fim){
+  int i, j;
+  ParticaoQS(inicio, fim, &i, &j, consciencias);
+  if(inicio < j) OrdenaQS(consciencias, inicio, j);
+  if(i < fim) OrdenaQS(consciencias, i, fim);
+
+}
+
+// chamada para simplificar
+void QuickSort(Consciencia *consciencias[], int tamanho){
+  OrdenaQS(consciencias, 0, tamanho-1);
+}
+
+/************* \QuickSort *****************/
+/************** HeapSort *****************/
+
+
+// cria o Heap e troca caso precise, chama a si mesma recursivamente
+void Empilhar(Consciencia *consciencias[], int tamanho, int raiz){
+  int maior = raiz;
+  int esquerda = 2 * raiz + 1;
+  int direita = 2 * raiz + 2;
+
+  if (esquerda < tamanho && consciencias[esquerda]->Dados() > consciencias[maior]->Dados()){
+    maior = esquerda;
+  }
+  if (direita < tamanho && consciencias[direita]->Dados() > consciencias[maior]->Dados()){
+    maior = direita;
+  }
+
+  if (maior != raiz){
+    std::swap(consciencias[maior], consciencias[raiz]);
+    Empilhar(consciencias, tamanho, maior);
+  }
+}
+
+// chama para todos os nós da arvoe a função de empilhar 
+void HeapSort(Consciencia *consciencias[], int tamanho){
+  for(int i = tamanho/2-1 ; i>=0 ; i--){
+    Empilhar(consciencias, tamanho, i);
+  }
+  for(int i = tamanho-1 ; i>=0 ; i--){
+    std::swap(consciencias[0], consciencias[i]);
+    Empilhar(consciencias, i, 0);  
+  }
+}
+/************* \HeapSort *****************/
+
+
+/************* RadixSort *****************/
+
+
+
+void QuickRadix(Consciencia *consciencias[], int inicio, int fim, int digito){
+
+  //std::cout << digito << std::endl;
+  int i = inicio, j = fim, count = 0;
+  if (fim <= inicio || digito >= 8 )return;
+  while(i != j && count < 30){
+    //std::cout << i << ":" << consciencias[i]->Dados()[digito] << j << ":" << consciencias[j]->Dados()[digito] << " | ";
+    while((consciencias[i]->Dados()[digito] == '0') && (i<j)) i++;
+    while((consciencias[j]->Dados()[digito] == '1') && (i<j)) j--;
+    count++;
+    std::swap(consciencias[i], consciencias[j]);
+  }
+  //std::cout << std::endl;
+  if (consciencias[i]->Dados()[digito] == 0) j++;
+  QuickRadix(consciencias, inicio, j-1, digito+1);
+  QuickRadix(consciencias, j, fim, digito+1);
+}
+
+
+
+void RadixSort(Consciencia *consciencias[], int tamanho){
+  QuickRadix(consciencias, 0, tamanho-1, 0);
+}
+
+/************ \RadixSort *****************/
+
+

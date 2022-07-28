@@ -1,0 +1,30 @@
+#ifndef consciencia
+#define consciencia
+
+#include <iostream>
+#include <string>
+#include <Consciencia.h>
+
+
+// diz qual de duas stringas é a menos -> 0 para a primeira, 1 para a segunda
+int MenorString(std::string palavra1, std::string palavra2);
+
+// imprime o nome das conscinecias em um vetor de consciencas 
+void PrintConsciencias(Consciencia *consciencias[], int tamanho);
+
+// imprime os dados das conscinecias em um vetor de consciencas 
+void PrintDados(Consciencia *consciencias[], int tamanho);
+
+// algorítmo de ordenação MergeSort
+void MergeSort(Consciencia *consciencias[], int tamanho);
+
+// algorítmo de ordenação QuickSort
+void QuickSort(Consciencia *consciencias[], int tamanho);
+
+// algorítmo de ordenação HeapSort
+void HeapSort(Consciencia *consciencias[], int tamanho);
+
+// algorítmo de ordenação RadixSort
+void RadixSort(Consciencia *consciencias[], int tamano);
+
+#endif
