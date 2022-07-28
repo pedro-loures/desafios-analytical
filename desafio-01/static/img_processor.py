@@ -1,5 +1,5 @@
 # Internal Import
-import utils as ut
+import static.utils as ut
 
 # External import
 import numpy as np

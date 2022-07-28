@@ -26,7 +26,32 @@
 # -4 POST http route with image and parameters
 # -5 GET  http route with image binary
 
-import utils as ut
-import img_processor as imgp
+# Local import
+import static.utils as ut
+import static.img_processor as imgp
 
-imgp.process_img(ut.CORPUS + '/11.jpg')
+# External import
+from flask import Flask, redirect, url_for, render_template
+from flask_cors import CORS
+import os
+
+
+app = Flask(__name__)
+CORS(app)
+
+template_dir = os.path.dirname(__file__)
+template_dir = os.path.join(template_dir, 'frontend')
+app = Flask(__name__, template_folder=template_dir)
+
+@app.route('/') 
+def redirect_landing():
+    return redirect(url_for('landing'))
+
+@app.route('/landing', methods = ['POST', 'GET'])
+def landing():
+  return render_template('landing.html')  
+
+# print(template_dir)
+# imgp.process_img(ut.CORPUS + '/11.jpg')
+if __name__ == '__main__':
+  app.run(host="0.0.0.0", debug=True, use_debugger=True, use_reloader=True)
