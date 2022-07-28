@@ -15,6 +15,9 @@ body{
   background-color: coral !important;
 }
 
+p{
+  margin-bottom: 0%
+}
 /* .menu{
 } */
 
@@ -22,9 +25,16 @@ body{
 /********** input ***********/
 
 .input-area{
+  padding: 2%;
   border-radius: 5px;
   background-color: #fff;
+  align-content: center;
+  justify-content: center;
+}
 
+.input{
+  margin-bottom: 10px;
+  width: 100%;
 }
 
 /********* /input ***********/
@@ -32,7 +42,7 @@ body{
 .drag-area{
   border: 2px dashed #fff;
   height: 500px;
-  width: 700px;
+  /* width: 700px; */ 
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -41,12 +51,15 @@ body{
 }
 .drag-area.active{
   border: 2px solid #fff;
+  background-color: #fba484 ;
+
 }
 .drag-area .icon{
   font-size: 100px;
   color: #fff;
 }
 .drag-area header{
+  text-align: center;
   font-size: 30px;
   font-weight: 500;
   color: #fff;
