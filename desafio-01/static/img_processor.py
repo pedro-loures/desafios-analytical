@@ -150,13 +150,13 @@ def process_img(img, reduce_factor = 7,
 
   # Process image 1
   _image= cv.imread(img)
-  _original_image = _image.copy()
   _image = cv.cvtColor(_image, cv.COLOR_BGR2GRAY)
 
   _image = 255 - _image # invert to reduce mean
 
   # Exponential Filter 2
   _image = _image * (_image/255) * (_image/255)
+  _original_image = _image.copy()
   _threshold = _image.mean() # Define treshold
 
   # Resize image do make it lightier
@@ -195,7 +195,7 @@ def process_img(img, reduce_factor = 7,
   _image_points = _reduce_square(_image_points, _image, padding = padding, scan_threshold=scan_threshold)
   _image_points = _reduce_square(_image_points, _image, padding = 0, scan_threshold=scan_threshold)
   # Convert points size  
-  _orig_h, _orig_w, _= _original_image.shape
+  _orig_h, _orig_w= _original_image.shape
   _original_points = _convert_points(_image_points, (_orig_w, _orig_h), (_width, _height))
   
   # Write rectangle
@@ -206,8 +206,15 @@ def process_img(img, reduce_factor = 7,
   _left, _top = _original_points[0][0].astype(int)
   _right, _bottom = _original_points[2][0].astype(int) 
   final_image = _original_image[_top:_bottom, _left:_right]
+  
+
+  _original_threshold = final_image.mean()
+  final_image = (final_image < _original_threshold).astype("uint8") * 255
+  #_,final_image = cv.threshold(final_image, 128, 255, cv.THRESH_BINARY | cv.THRESH_OTSU)
+
 
   # save image
   cv.imwrite(ut.TMP + "/rectangle.png", rectangle_img)
   cv.imwrite(ut.FINAL + "/final.png", final_image)
-  pass
+  
+  return final_image
