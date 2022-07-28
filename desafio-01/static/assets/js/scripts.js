@@ -1,49 +1,82 @@
-//selecting all required elements
-const dropArea = document.querySelector(".drag-area"),
-dragText = dropArea.querySelector("header"),
-button = dropArea.querySelector("button"),
-input = dropArea.querySelector("input");
-let file; //this is a global variable and we'll use it inside multiple functions
 
-button.onclick = ()=>{
-  input.click(); //if user click on the button then the input also clicked
-}
+// function process_image(){
+//   const path = '/process_image';
+//   document.body.scrollTop = 0; // For Safari
+//   document.documentElement.scrollTop = 0;
+//   axios.get(path,  {
+//     params: {
+//       reduce_factor : this.reduce_factor,
+//       filter_size : this.filter_size,
+//       filter_sensibility : this.filter_sensibility,
+//       convolution_factor : this.convolution_factor,
+//       padding : this.padding,
+//       scan_threshold : this.scan_threshold,
+//       vfile : this.vfile,
+//     } 
+//   })        
+//   dragText.textContent = "HERE! ";
+// }
+var vm = new Vue({
+  el: '#image_data',
+  data: {
+    name: 'Vue.js',
+    reduce_factor:7,
+    filter_size:10,
+    filter_sensibility:15,
+    convolution_factor:20,
+    padding: 15,
+    scan_threshold:0.5,
+    image_number: 1,
+    image:null
+    
+  },
+  // define methods under the `methods` object
+  methods: {
+    uploadFile() {
+      alert('uploaded')
+      this.image = this.$refs.file.files[0];
+    },
+    process_image: function (event) {
+      // `this` inside methods point to the Vue instance
 
-input.addEventListener("change", function(){
-  //getting user select file and [0] this means if user select multiple files then we'll select only the first one
-  file = this.files[0];
-  dropArea.classList.add("active");
-  showFile(); //calling function
-});
-
-
-//If user Drag File Over DropArea
-dropArea.addEventListener("dragover", (event)=>{
-  event.preventDefault(); //preventing from default behaviour
-  dropArea.classList.add("active");
-  dragText.textContent = "Release to Upload File";
-});
-
-//If user leave dragged File from DropArea
-dropArea.addEventListener("dragleave", ()=>{
-  dropArea.classList.remove("active");
-  dragText.textContent = "Drag & Drop to Upload File";
-});
-
-//If user drop File on DropArea
-dropArea.addEventListener("drop", (event)=>{
-  event.preventDefault(); //preventing from default behaviour
-  //getting user select file and [0] this means if user select multiple files then we'll select only the first one
-  file = event.dataTransfer.files[0];
-  showFile(); //calling function
-});
-
-function showFile(){
-  let fileType = file.type; //getting selected file type
-  let validExtensions = ["image/jpeg", "image/jpg", "image/png"]; //adding some valid image extensions in array
-  if(!validExtensions.includes(fileType)){ //if user selected file is an image file
-    alert("This is not an Image File!");
-    dropArea.classList.remove("active");
-    dragText.textContent = "Drag & Drop to Upload File";
+      alert('Hello ' + this.image + '!')
+      // `event` is the native DOM event
+      const path = '/process_image';  
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0;
+      axios.get(path,  {
+        params: {
+          reduce_factor : this.reduce_factor,
+          filter_size : this.filter_size,
+          filter_sensibility : this.filter_sensibility,
+          convolution_factor : this.convolution_factor,
+          padding : this.padding,
+          scan_threshold : this.scan_threshold,
+          image_number: this.image_number,
+          image : this.image
+        } 
+      })        
+  
+      alert(event.target.tagName)
+    }
   }
-}
+})
+// var vm = new Vue({
+//   data: {
+//     reduce_factor:7,
+//     filter_size:10,
+//     filter_sensibility:15,
+//     convolution_factor:20,
+//     padding: 15,
+//     scan_threshold:0.5,
+//     vfile:file
+
+//   },
+
+  
+//   methods: {
+//     process_image: function() {
+//       dragText.textContent ='função';
+//     }
+//   }
+// });
